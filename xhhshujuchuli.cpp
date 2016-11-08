@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <queue>
 #include "timeutil.h"
 #include "stringutil.h"
 
@@ -13,11 +14,12 @@ struct WindTime
 {
 	timeutil::TimePoint currTime;
 
-	float WIND_SPEED;
-	float WIND_DIR;
-	float OUTPUT_POWER;
-	int STATE;
+	std::vector<std::string> restdata;
 };
+
+static std::vector<std::string> Head;
+
+
 
 void OutDataToCSV(const std::string& csvfile, const std::map<std::string, std::vector<WindTime>>& AllData)
 {
@@ -31,9 +33,12 @@ void OutDataToCSV(const std::string& csvfile, const std::map<std::string, std::v
 	}
 	printf_s("开始输出数据\n");
 
-	ofs << "RECDATE" << "," << "RECTIME" << ","
-		<< "WINDSPEED" << "," << "WINDIR" << "," << "OUTPUTPOWER"
-		<< "," << "STATE" << '\n';
+	// 输出头
+	for each(const auto& var in Head)
+	{
+		ofs << var << ",";
+	}
+	ofs << '\n';
 
 	for each(const auto& var in AllData)
 	{
@@ -48,9 +53,14 @@ void OutDataToCSV(const std::string& csvfile, const std::map<std::string, std::v
 
 			std::string NewTime(TimeFormat);
 
-			ofs << var.first << "," << NewTime << "," << windtime.WIND_SPEED
-				<< "," << windtime.WIND_DIR << "," << windtime.OUTPUT_POWER << ","
-				<< windtime.STATE << '\n';
+			ofs << var.first << "," << NewTime << ",";
+
+			for each(const auto& restdata in windtime.restdata)
+			{
+				ofs << restdata << ",";
+			}
+
+			ofs << '\n';
 		}
 	}
 
@@ -85,15 +95,21 @@ std::map<std::string, std::vector<WindTime>> ReadDataByCSV(const std::string& cs
 
 		std::vector<std::string> splited = stringutil::splitstring(readstr);
 
-		if (splited.empty() || 1 == i)
+		if (splited.empty())
 			continue;
+		if (1 == i)
+		{
+			Head = splited;
+			continue;
+		}	
 
 		WindTime tmpdata;
 		tmpdata.currTime = timeutil::StringToT(splited[0] + "+" + splited[1], "%d/%d/%d+%d:%d:%d");
-		tmpdata.WIND_SPEED = atof(splited[2].c_str());//stringutil::strtoi<float>(splited[2]);//
-		tmpdata.WIND_DIR = atof(splited[3].c_str());//stringutil::strtoi<float>(splited[3]);//
-		tmpdata.OUTPUT_POWER = atof(splited[4].c_str());//stringutil::strtoi<float>(splited[4]);//
-		tmpdata.STATE = atoi(splited[5].c_str());//stringutil::strtoi<int>(splited[5]);//
+
+		for (std::vector<std::string>::const_iterator it = splited.begin() + 2; it != splited.end(); it++)
+		{
+			tmpdata.restdata.push_back(*it);
+		}
 
 		allDataByDate[splited[0]].push_back(tmpdata);
 
@@ -144,10 +160,8 @@ int main(int argc, char* argv[])
 		{
 			WindTime newtimedata;
 			newtimedata.currTime = StartTime_Point;
-			newtimedata.OUTPUT_POWER = 9999;
-			newtimedata.STATE = 9999;
-			newtimedata.WIND_DIR = 9999;
-			newtimedata.WIND_SPEED = 9999;
+
+			newtimedata.restdata = std::vector<std::string>(Head.size()-2, "9999");//-2去掉日期和时间
 
 			StartTime_Point += std::chrono::microseconds(10000000);
 
@@ -182,10 +196,8 @@ int main(int argc, char* argv[])
 				{
 					WindTime newtimedata;
 					newtimedata.currTime = StartTime_Point;
-					newtimedata.OUTPUT_POWER = 9999;
-					newtimedata.STATE = 9999;
-					newtimedata.WIND_DIR = 9999;
-					newtimedata.WIND_SPEED = 9999;
+
+					newtimedata.restdata = std::vector<std::string>(Head.size() - 2, "9999");//-2去掉日期和时间
 
 					newData.push_back(newtimedata);
 				}
@@ -198,10 +210,8 @@ int main(int argc, char* argv[])
 			StartTime_Point += std::chrono::microseconds(10000000);
 			WindTime newtimedata;
 			newtimedata.currTime = StartTime_Point;
-			newtimedata.OUTPUT_POWER = 9999;
-			newtimedata.STATE = 9999;
-			newtimedata.WIND_DIR = 9999;
-			newtimedata.WIND_SPEED = 9999;
+
+			newtimedata.restdata = std::vector<std::string>(Head.size() - 2, "9999");//-2去掉日期和时间
 
 			newData.push_back(newtimedata);
 		}

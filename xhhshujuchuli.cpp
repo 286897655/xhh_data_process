@@ -19,6 +19,7 @@ struct WindTime
 
 static std::vector<std::string> Head;
 
+static std::queue<>
 
 
 void OutDataToCSV(const std::string& csvfile, const std::map<std::string, std::vector<WindTime>>& AllData)

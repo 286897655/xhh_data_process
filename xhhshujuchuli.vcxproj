@@ -79,12 +79,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="stringutil.cpp" />
     <ClCompile Include="timeutil.cpp" />
+    <ClCompile Include="WinDataRepair.cpp" />
     <ClCompile Include="xhhshujuchuli.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stringutil.h" />
     <ClInclude Include="timeutil.h" />
+    <ClInclude Include="WindDataRepair.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,7 +2,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace timeutil
+namespace JGG
 {
 
 	TimePoint StringToT(const std::string& str, const char* fmt)

@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <chrono>
 
-namespace timeutil{
+namespace JGG{
 	using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
 
 	TimePoint StringToT(const std::string& str, const char* fmt);

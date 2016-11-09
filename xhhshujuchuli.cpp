@@ -7,19 +7,18 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
+#include "WindDataRepair.h"
 #include "timeutil.h"
 #include "stringutil.h"
 
 struct WindTime
 {
-	timeutil::TimePoint currTime;
+	JGG::TimePoint currTime;
 
 	std::vector<std::string> restdata;
 };
 
 static std::vector<std::string> Head;
-
-static std::queue<>
 
 
 void OutDataToCSV(const std::string& csvfile, const std::map<std::string, std::vector<WindTime>>& AllData)
@@ -47,7 +46,7 @@ void OutDataToCSV(const std::string& csvfile, const std::map<std::string, std::v
 		
 		for  each(const auto& windtime in var.second)
 		{
-			std::tm* nowtime = timeutil::TimePointTotm(windtime.currTime);
+			std::tm* nowtime = JGG::TimePointTotm(windtime.currTime);
 			
 			char TimeFormat[128];
 			sprintf_s(TimeFormat, "%d:%d:%d", nowtime->tm_hour, nowtime->tm_min, nowtime->tm_sec);
@@ -89,12 +88,11 @@ std::map<std::string, std::vector<WindTime>> ReadDataByCSV(const std::string& cs
 	ifs.close();
 	while (!buffer.eof())
 	{
-		i++;
-		printf_s("开始读取第:------%d-----行\n", i);
+		printf_s("开始读取第%d行\n", ++i);
 		std::string readstr;
 		buffer >> readstr;
 
-		std::vector<std::string> splited = stringutil::splitstring(readstr);
+		std::vector<std::string> splited = JGG::splitstring(readstr);
 
 		if (splited.empty())
 			continue;
@@ -105,7 +103,7 @@ std::map<std::string, std::vector<WindTime>> ReadDataByCSV(const std::string& cs
 		}	
 
 		WindTime tmpdata;
-		tmpdata.currTime = timeutil::StringToT(splited[0] + "+" + splited[1], "%d/%d/%d+%d:%d:%d");
+		tmpdata.currTime = JGG::StringToT(splited[0] + "+" + splited[1], "%d/%d/%d+%d:%d:%d");
 
 		for (std::vector<std::string>::const_iterator it = splited.begin() + 2; it != splited.end(); it++)
 		{
@@ -119,18 +117,13 @@ std::map<std::string, std::vector<WindTime>> ReadDataByCSV(const std::string& cs
 	return allDataByDate;
 }
 
-
-int main(int argc, char* argv[])
+void OldSingleThreadVersion(const std::string& incsvFile,const std::string& outcsvFile)
 {
-	std::clock_t time_start = std::clock();
-	std::map<std::string, std::vector<WindTime>> allDataByDate = ReadDataByCSV("winddata.csv");
-	std::clock_t time_end = std::clock();
+	std::map<std::string, std::vector<WindTime>> allDataByDate = ReadDataByCSV(incsvFile);
 
-	printf_s("读取文件耗时:%d\n", time_end - time_start);
-
-	const std::string startDate= allDataByDate.begin()->first;
+	const std::string startDate = allDataByDate.begin()->first;
 	const std::string endDate = allDataByDate.rbegin()->first;
-	
+
 	std::map<std::string, std::vector<WindTime>> NewAllData;
 
 	for each (const auto& var in allDataByDate)
@@ -141,7 +134,7 @@ int main(int argc, char* argv[])
 
 		std::vector<WindTime> dayData = var.second;
 
-		std::sort(dayData.begin(), dayData.end(), [](const WindTime& first,const WindTime& second)->int{
+		std::sort(dayData.begin(), dayData.end(), [](const WindTime& first, const WindTime& second)->int{
 			return (first.currTime <= second.currTime) ? 1 : 0;
 		});
 
@@ -150,9 +143,9 @@ int main(int argc, char* argv[])
 		// End Time
 		const std::string endtime = "23:50:00";
 
-		timeutil::TimePoint StartTime_Point = timeutil::StringToT(var.first + "+" + starttime, "%d/%d/%d+%d:%d:%d");
+		JGG::TimePoint StartTime_Point = JGG::StringToT(var.first + "+" + starttime, "%d/%d/%d+%d:%d:%d");
 
-		timeutil::TimePoint EndTime_Point = timeutil::StringToT(var.first + "+" + endtime, "%d/%d/%d+%d:%d:%d");
+		JGG::TimePoint EndTime_Point = JGG::StringToT(var.first + "+" + endtime, "%d/%d/%d+%d:%d:%d");
 
 		std::vector<WindTime> newData;
 
@@ -162,9 +155,9 @@ int main(int argc, char* argv[])
 			WindTime newtimedata;
 			newtimedata.currTime = StartTime_Point;
 
-			newtimedata.restdata = std::vector<std::string>(Head.size()-2, "9999");//-2去掉日期和时间
+			newtimedata.restdata = std::vector<std::string>(Head.size() - 2, "9999");//-2去掉日期和时间
 
-			StartTime_Point += std::chrono::microseconds(10000000);
+			StartTime_Point += std::chrono::milliseconds(10000);
 
 			newData.push_back(newtimedata);
 		}
@@ -182,12 +175,14 @@ int main(int argc, char* argv[])
 			auto period2 = windtime.currTime - EndTime_Point;
 			if (period2.count() >= 0)
 			{
+				StartTime_Point += std::chrono::milliseconds(10000);
 				newData.push_back(windtime);
+				continue;
 			}
 
 			while (true)
 			{
-				StartTime_Point += std::chrono::microseconds(10000000);
+				StartTime_Point += std::chrono::milliseconds(10000);
 				if (StartTime_Point == windtime.currTime)
 				{
 					newData.push_back(windtime);
@@ -208,7 +203,7 @@ int main(int argc, char* argv[])
 		// 补尾
 		while (StartTime_Point < EndTime_Point)
 		{
-			StartTime_Point += std::chrono::microseconds(10000000);
+			StartTime_Point += std::chrono::milliseconds(10000);
 			WindTime newtimedata;
 			newtimedata.currTime = StartTime_Point;
 
@@ -221,18 +216,35 @@ int main(int argc, char* argv[])
 
 		NewAllData[var.first] = newData;
 	}
-
-	time_start = std::clock();
-
-	std::cout << "数据分析耗时" << time_start-time_end << std::endl;
-
 	// 输出文件到csv文件
 	std::cout << "数据补充结束---" << "输出数据到csv文件" << std::endl;
 
-	OutDataToCSV(std::string("OutPutData.csv"), NewAllData);
+	OutDataToCSV(outcsvFile, NewAllData);
+}
 
-	time_end = std::clock();
-	std::cout << "数据输出到文件耗时" << time_end - time_start << std::endl;
-	return 0;
+
+
+int main(int argc, char* argv[])
+{
+	std::clock_t starttime = std::clock();
+
+	JGG::WindDataRepair *dataRepair = new JGG::WindDataRepair();
+
+	dataRepair->Start("winddata.csv", "multithread.csv");
+
+	delete dataRepair;
+
+	std::clock_t endtime1 = std::clock();
+
+	/*OldSingleThreadVersion("winddata.csv", "singthread.csv");
+	
+	std::clock_t endtime2 = std::clock();*/
+	
+
+	std::cout << "多线程版本耗时" << endtime1 - starttime << std::endl;
+
+	//std::cout << "单线程版本耗时" << endtime2 - endtime1 << std::endl;
+
+	return 1;
 }
 

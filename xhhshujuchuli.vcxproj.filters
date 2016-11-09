@@ -24,12 +24,21 @@
     <ClCompile Include="timeutil.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="WinDataRepair.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stringutil.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="timeutil.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="stringutil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WindDataRepair.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -22,6 +22,7 @@ namespace JGG
 
 	void WindDataRepair::Start(const std::string& incsvFile, const std::string& outcsvFile){
 
+		// 异步开始读取
 		std::future<bool> readfile = std::async(std::launch::async, [&]()->bool
 		{
 			// 按日期读取数据到队列
@@ -30,6 +31,7 @@ namespace JGG
 			return true;
 		});
 
+		// 异步开始解析
 		std::future<bool> analysis = std::async(std::launch::async, [&]()->bool
 		{
 			// 解析队列中的数据

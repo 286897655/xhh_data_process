@@ -23,6 +23,12 @@
 *.a
 *.lib
 
+# directory and vs
+*.sdf
+*.suo
+/Debug
+/Release
+
 # Executables
 *.exe
 *.out

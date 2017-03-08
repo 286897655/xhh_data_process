@@ -223,9 +223,9 @@ void OldSingleThreadVersion(const std::string& incsvFile,const std::string& outc
 }
 
 
-
 int main(int argc, char* argv[])
 {
+
 	std::clock_t starttime = std::clock();
 
 	JGG::WindDataRepair *dataRepair = new JGG::WindDataRepair();

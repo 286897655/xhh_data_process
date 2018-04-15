@@ -28,6 +28,9 @@
 *.suo
 /Debug
 /Release
+/Win32
+/ipch
+*.opensdf
 
 # Executables
 *.exe

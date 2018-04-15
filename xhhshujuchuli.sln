@@ -5,7 +5,9 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xhhshujuchuli", "xhhshujuchuli.vcxproj", "{88B19661-E632-4FF6-B83A-C8FBEB288A03}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "xhhPython", "xhhPython\xhhPython.pyproj", "{DE41354F-5958-4A4E-B49B-C2A69E6FE486}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExcelExportGUI", "ExcelExport\ExcelExportGUI\ExcelExportGUI.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Qt5Xlsx", "..\QtXlsxWriter\src\xlsx\Qt5Xlsx.vcxproj", "{15E25FFC-CA82-30A6-BCED-639FB0C01918}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,12 +29,26 @@ Global
 		{88B19661-E632-4FF6-B83A-C8FBEB288A03}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{88B19661-E632-4FF6-B83A-C8FBEB288A03}.Release|Win32.ActiveCfg = Release|Win32
 		{88B19661-E632-4FF6-B83A-C8FBEB288A03}.Release|Win32.Build.0 = Release|Win32
-		{DE41354F-5958-4A4E-B49B-C2A69E6FE486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE41354F-5958-4A4E-B49B-C2A69E6FE486}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{DE41354F-5958-4A4E-B49B-C2A69E6FE486}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{DE41354F-5958-4A4E-B49B-C2A69E6FE486}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE41354F-5958-4A4E-B49B-C2A69E6FE486}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{DE41354F-5958-4A4E-B49B-C2A69E6FE486}.Release|Win32.ActiveCfg = Release|Any CPU
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|Win32.Build.0 = Debug|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Win32.ActiveCfg = Release|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Win32.Build.0 = Release|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Debug|Win32.ActiveCfg = Debug|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Debug|Win32.Build.0 = Debug|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Release|Any CPU.ActiveCfg = Release|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Release|Win32.ActiveCfg = Release|Win32
+		{15E25FFC-CA82-30A6-BCED-639FB0C01918}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
